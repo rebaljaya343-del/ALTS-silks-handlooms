@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: srinath
+      POSTGRES_USER: srinath
+      POSTGRES_PASSWORD: srinath
+    ports:
+      - '5432:5432'
+    volumes:
+      - srinath-postgres:/var/lib/postgresql/data
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://srinath:srinath@db:5432/srinath
+      JWT_SECRET: change-me-in-production
+      CORS_ORIGINS: http://localhost:5173
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+
+volumes:
+  srinath-postgres:
